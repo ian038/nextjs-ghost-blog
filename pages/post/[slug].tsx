@@ -2,6 +2,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import styles from '../../styles/Home.module.scss'
 import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 
 type Post = {
     slug: string
@@ -17,7 +18,12 @@ const getPost = async (slug: string) => {
 
 const Post: React.FC<{ post: Post }> = props => {
     const { post } = props
+    const router = useRouter()
     const [enableLoadComments, setEnableLoadComments] = useState<boolean>(true)
+
+    if(router.isFallback) {
+        return <h1>Loading...</h1>
+    }
 
     const loadComments = () => {
         setEnableLoadComments(false)
